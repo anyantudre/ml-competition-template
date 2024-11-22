@@ -17,7 +17,7 @@ if __name__ == "__main__":
     y = df[config.TARGET_COL].values
 
     # initiate the kfold class from model_selection module
-    kf = model_selection.StratifiedKFold(n_splits=5)
+    kf = model_selection.StratifiedKFold(n_splits=config.N_FOLDS)
 
     # fill the new kfold column
     for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):

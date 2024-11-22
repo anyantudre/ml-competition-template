@@ -1,5 +1,10 @@
-python train.py --fold 0 --model xgb
-python train.py --fold 1 --model xgb
-python train.py --fold 2 --model xgb
-python train.py --fold 3 --model xgb
-python train.py --fold 4 --model xgb
+#!/bin/bash
+
+# Extract N_FOLDS and MODEL from config.py
+N_FOLDS=$(python -c "from config import N_FOLDS; print(N_FOLDS)")
+MODEL=$(python -c "from config import MODEL; print(MODEL)")
+
+# Loop through each fold
+for ((i=0; i<N_FOLDS; i++)); do
+    python train.py --fold "$i" --model "$MODEL"
+done
