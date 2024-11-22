@@ -11,11 +11,12 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 
 
-models = {  "dt": tree.DecisionTreeClassifier(criterion="gini", 
-                                            max_depth=19, 
-                                            min_samples_split=3, 
-                                            min_samples_leaf=3
-                                            ),
+models = {  "logistic": LogisticRegression(),
+            "dt": tree.DecisionTreeClassifier(criterion="gini", 
+                                                    max_depth=19, 
+                                                    min_samples_split=3, 
+                                                    min_samples_leaf=3
+                                                    ),
 
             "random_forest": RandomForestClassifier(
                         n_estimators=100, 
@@ -34,8 +35,8 @@ models = {  "dt": tree.DecisionTreeClassifier(criterion="gini",
                 random_state=42
                 ),
             
-            "xgb": xgb.XGBClassifier(),
-
+            "xgb": xgb.XGBClassifier(), # 5 CV: accuracy = 0.91216
+            
             "hist": ensemble.HistGradientBoostingClassifier(), 
 
             "extra": ensemble.ExtraTreesClassifier(), 

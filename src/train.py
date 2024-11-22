@@ -6,14 +6,14 @@ from sklearn import metrics
 
 import config
 import model_dispatcher
-import preprocessing
+import utils.preprocessing_utils as preprocessing_utils
 
 def run(fold, model):
     # read the training data with folds
     df = pd.read_csv(config.TRAINING_FILE)
 
     # simple label encoding
-    df = preprocessing.label_encoding(df)
+    df = preprocessing_utils.label_encoding(df)
     
     df_train = df[df.kfold != fold].reset_index(drop=True)
     df_valid = df[df.kfold == fold].reset_index(drop=True)

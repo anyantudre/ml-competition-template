@@ -2,7 +2,7 @@ import joblib
 import os
 import pandas as pd
 import config
-import preprocessing
+import utils.preprocessing_utils as preprocessing_utils
 
 model='xgb'
 
@@ -12,7 +12,7 @@ def predict(model):
     sample = pd.read_csv(config.SAMPLE_FILE)
 
     # simple label encoding
-    test = preprocessing.label_encoding(test)
+    test = preprocessing_utils.label_encoding(test)
     test = test.drop(config.COLS_TO_DROP, axis=1).values
 
     predictions = None

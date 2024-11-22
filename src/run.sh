@@ -6,5 +6,5 @@ MODEL=$(python -c "from config import MODEL; print(MODEL)")
 
 # Loop through each fold
 for ((i=0; i<N_FOLDS; i++)); do
-    python train.py --fold "$i" --model "$MODEL"
+    python -W ignore ohe_train_linear.py --fold "$i" --model "$MODEL"
 done
