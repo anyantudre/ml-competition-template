@@ -5,7 +5,7 @@ import config
 
 
 def predict(model):
-    x_test = joblib.load(os.path.join(config.MODEL_OUTPUT, f"test_encoded_fold.pkl"))
+    x_test = joblib.load(os.path.join(config.MODEL_OUTPUT, f"test_ohe_encoded.pkl"))
     sample = pd.read_csv(config.SAMPLE_FILE)
 
     predictions = None

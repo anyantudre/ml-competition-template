@@ -2,6 +2,7 @@ import joblib
 import os
 import argparse
 import pandas as pd
+import numpy as np
 from sklearn import metrics
 from sklearn import preprocessing
 
@@ -11,41 +12,44 @@ import model_dispatcher
 
 def run(fold, model):
     # read the training data with folds
-    df = pd.read_csv(config.TRAINING_FILE)
-    features = [f for f in df.columns if f not in ("Name", "id", config.TARGET_COL, "kfold")]
+    df     = pd.read_csv(config.TRAINING_FILE)
+    test   = pd.read_csv(config.TEST_FILE, index_col=0)
+    features     = [f for f in df.columns if f not in ("id", "Name", config.TARGET_COL, "kfold")]
+    cat_features = [f for f in features if f not in config.NUM_COLS]
 
     # fill all NaN values in numerical and categorical cols
     for col in config.NUM_COLS:
-        df.loc[:, col] = df[col].fillna(df[col].mean())
+        df[col]   = df[col].fillna(df[col].mean())
+        test[col] = test[col].fillna(df[col].mean())
 
     for col in features:
         if col not in config.NUM_COLS: # do not encode the numerical columns
-            df.loc[:, col] = df[col].astype(str).fillna("NONE")
+            df.loc[:, col]   = df[col].astype(str).fillna("NONE")
+            test.loc[:, col] = test[col].astype(str).fillna("NONE")
 
-    print(df.columns)
+    for col in features:
+        if col not in config.NUM_COLS: 
+            # initialize LabelEncoder for each feature column
+            lbl = preprocessing.LabelEncoder()
+            
+            # fit label encoder on all data
+            lbl.fit(df[col])
+            # transform all the data
+            df.loc[:, col] = lbl.transform(df[col])
+            test.loc[:, col] = test.transform(test[col])
 
     # get training and validation data using folds
     df_train = df[df.kfold != fold].reset_index(drop=True)
     df_valid = df[df.kfold == fold].reset_index(drop=True)
-    print(df_train.head())
-    print(df_valid.head())
 
-    # initialize OneHotEncoder from scikit-learn
-    ohe = preprocessing.OneHotEncoder()
-
-    # fit ohe on training + validation features
-    full_data = pd.concat([df_train[features], df_valid[features]], axis=0)
-    ohe.fit(full_data[features])
-
-    # transform training and validation data
-    x_train = ohe.transform(df_train[features])
-    x_valid = ohe.transform(df_valid[features])
-    print(x_valid.head())
-
+    x_train = df_train[features].values
+    x_valid = df_valid[features].values
+    test = test[features].values
+    
     y_train = df_train[config.TARGET_COL].values
     y_valid = df_valid[config.TARGET_COL].values
     
-    # use ONLY linear model here
+    # use ONLY TREE BASED model here
     clf = model_dispatcher.models[model]
 
     # fit the model on training data
@@ -62,7 +66,7 @@ def run(fold, model):
 
     # save the model and encoder
     joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"baseline_{model}_{fold}.pkl"))
-    joblib.dump(ohe, os.path.join(config.MODEL_OUTPUT, f"ohe_{model}_{fold}.pkl"))
+    joblib.dump(test, os.path.join(config.MODEL_OUTPUT, f"test_label_encoded.pkl"), compress=3)
 
 
 if __name__ == "__main__":

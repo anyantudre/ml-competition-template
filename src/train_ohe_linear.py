@@ -14,8 +14,8 @@ def run(fold, model):
     # read the training data with folds
     df     = pd.read_csv(config.TRAINING_FILE)
     test   = pd.read_csv(config.TEST_FILE, index_col=0)
-    features     = [f for f in df.columns if f not in ("id", config.TARGET_COL, "kfold")]
-    cat_features = [f for f in features if f not in config.NUM_COLS]
+    features     = [f for f in df.columns if f not in ("id", "Name", config.TARGET_COL, "kfold")]
+    cat_features = [f for f in features if f not in config.NUM_COLS and f not in ("kfold", config.TARGET_COL)]
 
     # fill all NaN values in numerical and categorical cols
     for col in config.NUM_COLS:
@@ -68,7 +68,7 @@ def run(fold, model):
     # save the model and encoder
     joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"baseline_{model}_{fold}.pkl"))
     joblib.dump(ohe, os.path.join(config.MODEL_OUTPUT, f"ohe_{model}.pkl"))
-    joblib.dump(x_test, os.path.join(config.MODEL_OUTPUT, f"test_encoded_fold.pkl"), compress=3)
+    joblib.dump(x_test, os.path.join(config.MODEL_OUTPUT, f"test_ohe_encoded.pkl"), compress=3)
 
 
 if __name__ == "__main__":

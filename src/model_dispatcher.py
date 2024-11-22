@@ -35,7 +35,7 @@ models = {  "logistic": LogisticRegression(),
                 random_state=42
                 ),
             
-            "xgb": xgb.XGBClassifier(), # 5 CV: accuracy = 0.91216
+            "xgb": xgb.XGBClassifier(n_jobs=-1), # 5 CV: accuracy = 0.91216
             
             "hist": ensemble.HistGradientBoostingClassifier(), 
 
