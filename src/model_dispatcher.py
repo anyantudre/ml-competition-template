@@ -1,42 +1,24 @@
 from sklearn import tree
+from sklearn import svm
 from sklearn import ensemble
+from sklearn import linear_model
+from sklearn import neural_network
+
 import xgboost as xgb
 import lightgbm as lgbm
 import catboost
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
-
 
 models = {  
             ########################## linear models ############################
-            "logistic": LogisticRegression(),
+            "logistic": linear_model.LogisticRegression(),
             
-            "svm": SVC(
-                    kernel="linear", 
-                    class_weight="balanced",  # Addressing class imbalance
-                    random_state=42
-                    ),
+            "svm": svm.SVC(random_state=42),
 
             ########################### tree based models ##########################
-            "dt": tree.DecisionTreeClassifier(criterion="gini", 
-                                                    max_depth=19, 
-                                                    min_samples_split=3, 
-                                                    min_samples_leaf=3
-                                                    ),
-            "random_forest": RandomForestClassifier(
-                        n_estimators=100, 
-                        criterion="gini", 
-                        max_depth=None, 
-                        min_samples_split=2, 
-                        min_samples_leaf=1, 
-                        class_weight="balanced",  # Addressing class imbalance
-                        max_features = None,
-                        random_state=42
-                    ),
+            "dt": tree.DecisionTreeClassifier(),
+
+            "random_forest": ensemble.RandomForestClassifier(random_state=42),
 
             "xgb": xgb.XGBClassifier(n_jobs=-1), # 5 CV: accuracy = 0.91216
             
@@ -44,7 +26,7 @@ models = {
 
             "extra": ensemble.ExtraTreesClassifier(), 
 
-            "lgbm": lgbm.LGBMClassifier(n_jobs=-1),
+            "lgbm": lgbm.LGBMClassifier(n_jobs=-1, verbose=-1),
 
             'gbm': ensemble.GradientBoostingClassifier(),
 
