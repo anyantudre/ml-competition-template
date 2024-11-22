@@ -8,8 +8,8 @@ TEST_FILE       = "../input/test.csv"
 SAMPLE_FILE     = "../input/sample_submission.csv"
 
 N_FOLDS = 5
-MODEL   = "xgb"
-TRAINING_SCRIPT = "train_label_tree.py"
+MODEL   = "svm"
+TRAINING_SCRIPT = "train_ohe_linear.py" if MODEL in ("logistic", "svm") else "train_label_tree.py"
 TARGET_COL   = "Depression"
 #COLS_TO_DROP = ["Name", "City", "Study Satisfaction", "Academic Pressure", "CGPA", "Profession", "Work Pressure", "Job Satisfaction", "Dietary Habits", "Financial Stress", "Degree", "Sleep Duration", "Dietary Habits", ]
 NUM_COLS = ["CGPA", "Age"]

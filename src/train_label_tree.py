@@ -27,16 +27,17 @@ def run(fold, model):
             df.loc[:, col]   = df[col].astype(str).fillna("NONE")
             test.loc[:, col] = test[col].astype(str).fillna("NONE")
 
+    full_data = pd.concat([df[features], test[features]], axis=0)
     for col in features:
         if col not in config.NUM_COLS: 
             # initialize LabelEncoder for each feature column
             lbl = preprocessing.LabelEncoder()
             
             # fit label encoder on all data
-            lbl.fit(df[col])
+            lbl.fit(full_data[col])
             # transform all the data
-            df.loc[:, col] = lbl.transform(df[col])
-            test.loc[:, col] = test.transform(test[col])
+            df.loc[:, col]   = lbl.transform(df[col])
+            test.loc[:, col] = lbl.transform(test[col])
 
     # get training and validation data using folds
     df_train = df[df.kfold != fold].reset_index(drop=True)
@@ -61,29 +62,35 @@ def run(fold, model):
     # calculate & print accuracy
     accuracy = metrics.accuracy_score(y_valid, preds)
     f1 = metrics.f1_score(y_valid, preds, average='weighted')
-    print(f"Fold={fold}, Model={model}, Accuracy={accuracy}, F1-Score={f1}\n")
+    print(f"Fold={fold}, accuracy={accuracy}, f1-Score={f1}\n")
     #print(f"Confusion Matrix:\n {metrics.confusion_matrix(y_valid, preds)}")
 
     # save the model and encoder
     joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"baseline_{model}_{fold}.pkl"))
     joblib.dump(test, os.path.join(config.MODEL_OUTPUT, f"test_label_encoded.pkl"), compress=3)
 
+    return accuracy, f1
+
+
+def run_all_folds(model):
+    accuracies = []
+    f1_scores = []
+    
+    print(f"Model:{model}")
+    for fold in range(config.N_FOLDS):
+        accuracy, f1 = run(fold=fold, model=model)
+        accuracies.append(accuracy)
+        f1_scores.append(f1)
+
+    avg_accuracy = np.mean(accuracies)
+    avg_f1 = np.mean(f1_scores)
+
+    print(f"Global Average accuracy={avg_accuracy}, Global Average f1-score={avg_f1}")
+
 
 if __name__ == "__main__":
-    # initialize ArgumentParser class of argparse
     parser = argparse.ArgumentParser()
-
-    # add the different arguments you need and their types
-    parser.add_argument(
-        "--fold",
-        type=int
-    )
-    parser.add_argument(
-        "--model",
-        type=str
-    )
-    # read the arguments from the command line
+    parser.add_argument("--model", type=str)
     args = parser.parse_args()
 
-    # run the fold specified by command line arguments
-    run(fold=args.fold, model=args.model)
+    run_all_folds(model=args.model)

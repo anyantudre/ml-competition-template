@@ -11,13 +11,22 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 
 
-models = {  "logistic": LogisticRegression(),
+models = {  
+            ########################## linear models ############################
+            "logistic": LogisticRegression(),
+            
+            "svm": SVC(
+                    kernel="linear", 
+                    class_weight="balanced",  # Addressing class imbalance
+                    random_state=42
+                    ),
+
+            ########################### tree based models ##########################
             "dt": tree.DecisionTreeClassifier(criterion="gini", 
                                                     max_depth=19, 
                                                     min_samples_split=3, 
                                                     min_samples_leaf=3
                                                     ),
-
             "random_forest": RandomForestClassifier(
                         n_estimators=100, 
                         criterion="gini", 
@@ -29,12 +38,6 @@ models = {  "logistic": LogisticRegression(),
                         random_state=42
                     ),
 
-            "svm": SVC(
-                kernel="linear", 
-                class_weight="balanced",  # Addressing class imbalance
-                random_state=42
-                ),
-            
             "xgb": xgb.XGBClassifier(n_jobs=-1), # 5 CV: accuracy = 0.91216
             
             "hist": ensemble.HistGradientBoostingClassifier(), 

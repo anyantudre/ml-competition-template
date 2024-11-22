@@ -20,7 +20,6 @@ def predict(model):
     predictions = predictions / config.N_FOLDS
 
     sample[config.TARGET_COL] = predictions.astype(int)
-    print(sample.head())
     return sample
 
 

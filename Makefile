@@ -2,13 +2,13 @@ install:
 	pip install -r requirements.txt
 
 folds:
-	python create_folds.py
+	python ./src/create_folds.py
 	
 train:
-	sh run.wh
+	sh ./src/run.sh
 
 inference:
-	python inference.py
+	python ./src/inference.py
 
 format:
 	#black *.py
