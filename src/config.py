@@ -10,4 +10,5 @@ SAMPLE_FILE     = "../input/sample_submission.csv"
 N_FOLDS = 5
 MODEL   = "logistic"
 TARGET_COL   = "Depression"
-COLS_TO_DROP = ["Name", "City", "Study Satisfaction", "Academic Pressure", "CGPA", "Profession", "Work Pressure", "Job Satisfaction", "Dietary Habits", "Financial Stress", "Degree", "Sleep Duration", "Dietary Habits", ]
+#COLS_TO_DROP = ["Name", "City", "Study Satisfaction", "Academic Pressure", "CGPA", "Profession", "Work Pressure", "Job Satisfaction", "Dietary Habits", "Financial Stress", "Degree", "Sleep Duration", "Dietary Habits", ]
+NUM_COLS = ["CGPA", "Age"]

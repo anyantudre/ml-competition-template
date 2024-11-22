@@ -1,6 +1,9 @@
 install:
 	pip install -r requirements.txt
 
+folds:
+	python create_folds.py
+	
 train:
 	sh run.wh
 
