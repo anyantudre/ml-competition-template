@@ -5,7 +5,7 @@ folds:
 	python ./src/create_folds.py
 	
 train:
-	sh ./src/run.sh
+	PYTHONPATH=./src sh ./src/run.sh
 
 inference:
 	python ./src/inference.py
