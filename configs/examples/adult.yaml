@@ -1,0 +1,19 @@
+# mlt example adult  ->  mlt run configs/examples/adult.yaml
+# Categoricals: rare values grouped, counts and out-of-fold target encoding added.
+data:
+  train: data/adult/train.csv
+  test: data/adult/test.csv
+  sample_submission: data/adult/sample_submission.csv
+  id_col: id
+  target: income
+task: binary
+metric: auc
+features:
+  rare_min_count: 20
+  count_encode: [occupation, native_country]
+  target_encode: [occupation, education, native_country]
+  combine: [[education, occupation]]
+model:
+  name: lgbm
+  params:
+    learning_rate: 0.05

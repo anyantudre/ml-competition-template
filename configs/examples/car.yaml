@@ -1,0 +1,15 @@
+# mlt example car  ->  mlt run configs/examples/car.yaml
+# All-categorical multiclass target; logloss on class probabilities.
+data:
+  train: data/car/train.csv
+  test: data/car/test.csv
+  sample_submission: data/car/sample_submission.csv
+  id_col: id
+  target: acceptability
+task: multiclass
+metric: logloss
+model:
+  name: xgb
+  params:
+    learning_rate: 0.1
+    max_depth: 5

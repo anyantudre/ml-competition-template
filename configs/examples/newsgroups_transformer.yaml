@@ -1,0 +1,14 @@
+# Fine-tune a Hugging Face encoder. A 2-layer BERT (4M parameters) keeps the CPU demo fast; on a GPU try
+# microsoft/deberta-v3-base or roberta-base with lr 2e-5 and 3-5 epochs.
+extends: newsgroups_tfidf.yaml
+model:
+  name: transformer
+  backbone: google/bert_uncased_L-2_H-128_A-2
+  params: {}
+train:
+  epochs: 3
+  batch_size: 32
+  lr: 1.0e-4
+  max_len: 128
+  warmup_ratio: 0.1
+  scheduler: linear

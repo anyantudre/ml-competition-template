@@ -1,0 +1,9 @@
+# Same data, CatBoost with native categorical handling (no encoding needed).
+extends: adult.yaml
+features:
+  count_encode: []
+  target_encode: []
+  combine: []
+model:
+  name: catboost
+  params: {}

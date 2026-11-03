@@ -1,0 +1,16 @@
+# mlt example wine_quality  ->  mlt run configs/examples/wine_quality.yaml
+# Ordinal target scored with quadratic weighted kappa: regress, then tune the rounding cuts
+# on the out-of-fold predictions.
+data:
+  train: data/wine_quality/train.csv
+  test: data/wine_quality/test.csv
+  sample_submission: data/wine_quality/sample_submission.csv
+  id_col: id
+  target: quality
+task: ordinal
+metric: qwk
+model:
+  name: lgbm
+  params:
+    learning_rate: 0.03
+    num_leaves: 15

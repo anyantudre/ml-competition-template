@@ -1,0 +1,21 @@
+# mlt example house_prices  ->  mlt run configs/examples/house_prices.yaml
+# RMSLE metric: train on log1p(SalePrice), predictions are mapped back with expm1.
+data:
+  train: data/house_prices/train.csv
+  test: data/house_prices/test.csv
+  sample_submission: data/house_prices/sample_submission.csv
+  id_col: id
+  target: SalePrice
+task: regression
+metric: rmsle
+target_transform: log1p
+features:
+  rare_min_count: 10
+  aggregates:
+    - {by: Neighborhood, cols: [GrLivArea, OverallQual], aggs: [mean]}
+model:
+  name: lgbm
+  params:
+    learning_rate: 0.03
+    num_leaves: 15
+    min_child_samples: 10

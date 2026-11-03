@@ -1,0 +1,22 @@
+# mlt example digits_seg  ->  mlt run configs/examples/digits_seg.yaml
+# U-Net with a pretrained resnet18 encoder. Masks are digit strokes; the submission is RLE.
+modality: segmentation
+data:
+  train: data/digits_seg/train.csv
+  test: data/digits_seg/test.csv
+  sample_submission: data/digits_seg/sample_submission.csv
+  id_col: id
+  image_col: image
+  mask_col: mask
+  image_dir: data/digits_seg
+cv:
+  n_splits: 3
+model:
+  name: Unet
+  backbone: resnet18
+train:
+  epochs: 3
+  batch_size: 32
+  lr: 1.0e-3
+  image_size: 64
+  augment: false

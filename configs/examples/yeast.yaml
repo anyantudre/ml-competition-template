@@ -1,0 +1,14 @@
+# mlt example yeast  ->  mlt run configs/examples/yeast.yaml
+# Multilabel: one binary model per label, mean column-wise log loss.
+data:
+  train: data/yeast/train.csv
+  test: data/yeast/test.csv
+  sample_submission: data/yeast/sample_submission.csv
+  id_col: id
+  target: [label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8, label_9, label_10, label_11, label_12, label_13, label_14]
+task: multilabel
+metric: logloss
+model:
+  name: logreg
+  params:
+    C: 0.5

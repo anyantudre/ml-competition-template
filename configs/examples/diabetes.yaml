@@ -1,0 +1,15 @@
+# mlt example diabetes  ->  mlt run configs/examples/diabetes.yaml
+data:
+  train: data/diabetes/train.csv
+  test: data/diabetes/test.csv
+  sample_submission: data/diabetes/sample_submission.csv
+  id_col: id
+  target: target
+task: regression
+metric: rmse
+cv:
+  scheme: binned   # stratify on target bins (Sturges' rule) so every fold sees the full range
+model:
+  name: ridge
+  params:
+    alpha: 1.0

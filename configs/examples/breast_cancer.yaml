@@ -1,0 +1,14 @@
+# mlt example breast_cancer  ->  mlt run configs/examples/breast_cancer.yaml
+data:
+  train: data/breast_cancer/train.csv
+  test: data/breast_cancer/test.csv
+  sample_submission: data/breast_cancer/sample_submission.csv
+  id_col: id
+  target: target
+task: binary
+metric: auc
+model:
+  name: lgbm
+  params:
+    learning_rate: 0.05
+    num_leaves: 15

@@ -1,0 +1,20 @@
+# Kaggle Playground Series S4E11 (Exploring Mental Health Data), the competition this
+# template started from. Get the data (accept the rules on Kaggle first):
+#   kaggle competitions download -c playground-series-s4e11 -p data/playground-series-s4e11
+#   unzip data/playground-series-s4e11/playground-series-s4e11.zip -d data/playground-series-s4e11
+# The metric is accuracy, so the submission holds 0/1 labels.
+data:
+  train: data/playground-series-s4e11/train.csv
+  test: data/playground-series-s4e11/test.csv
+  sample_submission: data/playground-series-s4e11/sample_submission.csv
+  id_col: id
+  target: Depression
+  drop: [Name]
+task: binary
+metric: accuracy
+features:
+  rare_min_count: 30
+model:
+  name: catboost
+  params:
+    learning_rate: 0.08

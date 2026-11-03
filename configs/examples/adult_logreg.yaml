@@ -1,0 +1,9 @@
+# Same data, the book's linear baseline: sparse one-hot categoricals + scaled numerics.
+extends: adult.yaml
+features:
+  count_encode: []
+  target_encode: []
+model:
+  name: logreg
+  params:
+    C: 0.5

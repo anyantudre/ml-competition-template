@@ -1,0 +1,12 @@
+# Same data, entity embeddings for every categorical column (needs the nn extra).
+extends: adult.yaml
+features:
+  count_encode: []
+  target_encode: []
+  combine: []
+model:
+  name: entity_nn
+  params:
+    epochs: 8
+    batch_size: 256
+    lr: 0.002

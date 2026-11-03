@@ -1,0 +1,24 @@
+# mlt example digits  ->  mlt run configs/examples/digits.yaml
+# A small pretrained timm backbone so the demo runs on a CPU in a few minutes.
+# For a real competition: efficientnet_b0 / convnext_tiny, image_size 384+, 10-20 epochs, a GPU.
+modality: image
+task: multiclass
+metric: accuracy
+data:
+  train: data/digits/train.csv
+  test: data/digits/test.csv
+  sample_submission: data/digits/sample_submission.csv
+  id_col: id
+  target: digit
+  image_col: image
+  image_dir: data/digits/images
+cv:
+  n_splits: 3
+model:
+  backbone: mobilenetv3_small_100
+train:
+  epochs: 3
+  batch_size: 64
+  lr: 2.0e-3
+  image_size: 64
+  augment: false

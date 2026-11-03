@@ -1,0 +1,19 @@
+# mlt example newsgroups  ->  mlt run configs/examples/newsgroups_tfidf.yaml
+modality: text
+task: multiclass
+metric: logloss
+data:
+  train: data/newsgroups/train.csv
+  test: data/newsgroups/test.csv
+  sample_submission: data/newsgroups/sample_submission.csv
+  id_col: id
+  target: topic
+  text_col: text
+model:
+  name: tfidf
+  params:
+    C: 4.0
+features:
+  text:
+    ngram_range: [1, 2]
+    min_df: 2
