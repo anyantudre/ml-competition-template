@@ -54,8 +54,11 @@ def _write(out: Path, train: pd.DataFrame, test: pd.DataFrame, id_col: str, targ
 
 
 def _openml(data_id: int) -> pd.DataFrame:
-    frame = datasets.fetch_openml(data_id=data_id, as_frame=True, parser="auto").frame
-    return frame
+    try:
+        return datasets.fetch_openml(data_id=data_id, as_frame=True, parser="auto").frame
+    except TypeError:
+        # scikit-learn's pandas ARFF parser fails on numeric categories with pandas 3
+        return datasets.fetch_openml(data_id=data_id, as_frame=True, parser="liac-arff").frame
 
 
 def _with_id(df: pd.DataFrame) -> pd.DataFrame:
