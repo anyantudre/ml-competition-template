@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: core (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, python: "3.10" }
+          - { os: ubuntu-latest, python: "3.13" }
+          - { os: windows-latest, python: "3.12" }
+          - { os: macos-latest, python: "3.12" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+          activate-environment: true
+      - name: Install
+        run: uv pip install -e ".[tune,serve,dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Tests (no torch)
+        run: pytest -q -m "not torch and not network"
+      - name: Fresh-clone demo
+        shell: bash
+        run: |
+          mlt example breast_cancer
+          mlt run configs/examples/breast_cancer.yaml
+          mlt validate outputs/breast_cancer/submission.csv --sample data/breast_cancer/sample_submission.csv
+          mlt score outputs/breast_cancer/submission.csv --solution data/breast_cancer/solution.csv --metric auc --task binary
+
+  deep:
+    name: neural pipelines (CPU)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          activate-environment: true
+      - name: Install with CPU PyTorch
+        run: uv pip install --torch-backend cpu -e ".[all,dev]"
+      - name: Tests (torch and downloads)
+        run: pytest -q -m "torch or network"
+      - name: Image and segmentation demos
+        run: |
+          mlt example digits
+          mlt run configs/examples/digits.yaml --set train.epochs=1 --set model.backbone=resnet18 --set train.pretrained=false
+          mlt example digits_seg
+          mlt run configs/examples/digits_seg.yaml --set train.epochs=1 --set train.pretrained=false
+          mlt validate outputs/digits_seg/submission.csv --sample data/digits_seg/sample_submission.csv --allow-empty

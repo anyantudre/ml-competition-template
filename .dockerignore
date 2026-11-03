@@ -1,0 +1,10 @@
+.git
+.venv
+venv
+data
+outputs
+notebooks
+tests
+**/__pycache__
+*.joblib
+*.pt
