@@ -3,6 +3,7 @@
 #   kaggle competitions download -c playground-series-s4e11 -p data/playground-series-s4e11
 #   unzip data/playground-series-s4e11/playground-series-s4e11.zip -d data/playground-series-s4e11
 # The metric is accuracy, so the submission holds 0/1 labels.
+# Next steps: --set model.name=catboost, mlt tune, then mlt ensemble the runs.
 data:
   train: data/playground-series-s4e11/train.csv
   test: data/playground-series-s4e11/test.csv
@@ -15,6 +16,7 @@ metric: accuracy
 features:
   rare_min_count: 30
 model:
-  name: catboost
+  name: lgbm
   params:
-    learning_rate: 0.08
+    learning_rate: 0.05
+    num_leaves: 31

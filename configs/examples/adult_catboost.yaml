@@ -6,4 +6,6 @@ features:
   combine: []
 model:
   name: catboost
-  params: {}
+  params:
+    iterations: 800
+    learning_rate: 0.1
