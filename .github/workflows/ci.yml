@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           activate-environment: true
+      - name: OpenMP for LightGBM (macOS)
+        if: runner.os == 'macOS'
+        run: brew install libomp
       - name: Install
         run: uv pip install -e ".[tune,serve,dev]"
       - name: Lint

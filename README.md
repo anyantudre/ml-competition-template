@@ -31,6 +31,8 @@ uv venv
 uv pip install -e ".[all,dev]"        # or just -e . for tabular only
 ```
 
+On macOS, LightGBM also needs OpenMP: `brew install libomp`.
+
 `uv` is optional: `python -m venv .venv` and `pip install -e ".[all,dev]"` work too. Activate the
 environment (`source .venv/bin/activate`, or `.venv\Scripts\activate` on Windows), then try an example:
 
